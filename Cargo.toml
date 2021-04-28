@@ -1,0 +1,11 @@
+[package]
+name = "dump"
+version = "0.1.0"
+authors = ["Isaac Clayton <slightknack@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+ramhorns = "0.10"
+chrono = "0.4"
+deunicode = "1.2"
+rss = "1.10"
