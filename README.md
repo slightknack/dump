@@ -17,7 +17,7 @@ cd website
 dump ../website-rendered # output path
 ```
 
-> ### Notes
+> Notes:
 > 1. Your dump doesn't have to be named `website`. You could name it *Carl's Magical Landfill* for all I care.
 > 2. By default, if 'output path' already exists, `dump` will abort. To overwrite the output path no matter what, pass the `--force` flag after the output path: `dump <output> --force`.
 
@@ -63,8 +63,8 @@ Here are the base fields provided, that can be accessed directly, e.g. `{{conten
 - `created`: time file was created, `YYYY-MM-DD`
 - `modified`: time file was las modified, `YYYY-MM-DD`
 - `title`: human-readable title of the file
-- `link`: web link to this page, relative to root, i.e. `/this/is/some/page`
-- `raw_link`: web link to this page's source, i.e. `/this/is/some/image.png`
+- `link`: web link to this page, relative to root, i.e. `this/is/some/page`
+- `raw_link`: web link to this page's source, i.e. `this/is/some/image.png`
 - `slug`: Last part of the link, i.e. `page`
 - `raw_slug`: Last part of link with extension, i.e. `image.png`
 
@@ -77,7 +77,7 @@ This field can be used in templates like this: `{{#md}}{{{content}}}{{/md}}`. No
 
 Nothing much else to add, I guess.
 
-## Getting Creative
+### Getting Creative
 Extensions are pretty flexible. Say we have an image file (`.png`) and we want it to be rendered as a page. We can something like:
 
 ```html
@@ -95,5 +95,18 @@ This is a very barebones project, and I have more planned. (Check out `IDEAS.md`
 
 I have this huge 2TB hard-drive with a collection of files I want to be able to toss up online and explore. My goal is to be able to `dump` the drive and host it as a professional-looking website.
 
-## The `.dumpignore`
+### The `.dumpignore`
 If you put a `.dumpignore` in `.dump`, files that match the `.dumpignore` will be ignored. Although this file uses the same syntax as a `.gitignore`, it's a bit different semantically: you can only have one, and all patterns are matched from the root.
+
+> Note: This doesn't work 100% yet.
+
+### The `dump_rss.toml`
+Dump can generate an RSS feed for your website, just include a `dump_rss.toml` in `.dump`. The format is as follows:
+
+```toml
+title = "The Dump Website Dumper"
+url = "https://www.example.com"
+description = "This is the dump of the program that made this dump."
+```
+
+> Note: This works, but hasn't been tested with an RSS reader. The XML looks good though.
