@@ -18,7 +18,9 @@ cd website
 dump ../website-rendered # output path
 ```
 
-> Note: Your dump doesn't have to be named `website`. You could name it "Carl's Magical Landfill" for all I care.
+> Notes:
+> 1. Your dump doesn't have to be named `website`. You could name it "Carl's Magical Landfill" for all I care.
+> 2. By default, if 'output path' already exists, dump will abort. To overwrite the output path no matter what, pass the `--force` flag after the output path: `dump <output> --force`.
 
 We only require one thing: a `.dump/` directory in `website`'s root.
 The `.dump/` directory *must* have the following files:
@@ -38,7 +40,7 @@ Dump provides content as markdown, if requested, so the following is possible:
 
 ```html
 <!-- ./dump/ext/md.mustache -->
-{{#md}}{{content}}{{/md}}
+{{#md}}{{{content}}}{{/md}}
 ```
 
 These extensions must take the form `<ext>.mustache`, where `<ext>` is the file extension, e.g. `file-name.md` has the `<ext>` of `md`.
@@ -69,9 +71,9 @@ Here are the base fields provided, that can be accessed directly, e.g. `{{conten
 ### Markdown
 `md` is the markdown field. It has only one item:
 
-- `content`: content, rendered as markdown
+- `content`: content, rendered as markdown.
 
-This field can be used in templates like this: `{{#md}}{{content}}{{/md}}`.
+This field can be used in templates like this: `{{#md}}{{{content}}}{{/md}}`. Note that `content` *must* be escaped with triple brackets `{{{}}}` because it is raw html.
 
 Nothing much else to add, I guess.
 
@@ -94,4 +96,4 @@ This is a very barebones project, and I have more planned. (Check out `IDEAS.md`
 I have this huge 2TB hard-drive with a collection of files I want to be able to toss up online and explore. My goal is to be able to `dump` the drive and host it as a professional-looking website.
 
 ## The `.dumpignore`
-If you put a `.dumpignore` in `.dump`, files that match the `.dumpignore` will be ignored.
+If you put a `.dumpignore` in `.dump`, files that match the `.dumpignore` will be ignored. Although this file uses the same syntax as a `.gitignore`, it's a bit different semantically: you can only have one, and all patterns are matched from the root.

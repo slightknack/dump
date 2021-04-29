@@ -192,6 +192,7 @@ dependencies = [
  "chrono",
  "deunicode",
  "gitignored",
+ "pulldown-cmark 0.8.0",
  "ramhorns",
  "rss",
 ]
@@ -359,6 +360,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "pulldown-cmark"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ffade02495f22453cd593159ea2f59827aae7f53fa8323f756799b670881dcf8"
+dependencies = [
+ "bitflags",
+ "getopts",
+ "memchr",
+ "unicase",
+]
+
+[[package]]
 name = "quick-xml"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -388,7 +401,7 @@ dependencies = [
  "beef",
  "fnv",
  "logos",
- "pulldown-cmark",
+ "pulldown-cmark 0.7.2",
  "ramhorns-derive",
 ]
 

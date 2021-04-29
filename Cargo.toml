@@ -6,6 +6,8 @@ edition = "2018"
 
 [dependencies]
 ramhorns = "0.10"
+# Until https://github.com/maciejhirsz/ramhorns/issues/47
+pulldown-cmark = "0.8.0"
 chrono = "0.4"
 deunicode = "1.2"
 rss = "1.10"

@@ -6,6 +6,7 @@ use std::{
 };
 use ramhorns::{Template, Content};
 use chrono::prelude::*;
+use pulldown_cmark::{Parser, Options, html};
 use crate::route::Route;
 
 #[derive(Clone, Content, PartialEq, Eq)]
@@ -67,8 +68,16 @@ impl PartialOrd for Metadata {
 
 #[derive(Content)]
 pub struct Markdown {
-    #[md]
-    pub content: String,
+    content: String,
+}
+
+impl Markdown {
+    pub fn new(raw: &str) -> Markdown {
+        let parser = Parser::new_ext(&raw, Options::all());
+        let mut html_output = String::new();
+        html::push_html(&mut html_output, parser);
+        return Markdown { content: html_output };
+    }
 }
 
 #[derive(Content)]
@@ -100,7 +109,7 @@ impl Context {
             m: metadata,
             parent,
             children,
-            md: content.clone().map(|i| Markdown { content: i }),
+            md: content.clone().map(|i| Markdown::new(&i)),
             content,
         }
     }

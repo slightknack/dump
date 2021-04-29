@@ -13,7 +13,6 @@ pub fn get_index_children(environment: &mut Env, route: &Route) -> (Option<Route
 
         if environment.ignores(&new_route.path) { continue; }
         if !slugs.insert(new_route.slug()) {
-            println!("{:#?}", children);
             eprintln!(
                 "Multiple slugs of the name '{}'; first duplicate is: {}",
                 new_route.slug(),
