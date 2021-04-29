@@ -1,5 +1,5 @@
 use std::{fs, path::PathBuf, io::Write};
-use crate::{dump::{ExtMap, Env, Context, Metadata}, route::Route};
+use crate::{dump::{ExtMap, Env}, metadata::{Context, Metadata}, route::Route};
 
 pub fn get_index_children(route: &Route) -> (Option<Route>, Vec<Route>) {
     let mut index: Option<Route> = None;
@@ -26,7 +26,6 @@ pub fn get_index_children(route: &Route) -> (Option<Route>, Vec<Route>) {
 pub fn render(
     parent:      Option<Metadata>,
     route:       &Route,
-    environment: &Env,
     extensions:  &ExtMap,
     output_path: PathBuf,
 ) -> Metadata {
@@ -44,7 +43,6 @@ pub fn render(
                 Some(metadata.clone()),
                 child,
                 vec![],
-                environment,
                 extensions,
                 output_path.clone(),
             )
@@ -52,7 +50,6 @@ pub fn render(
             render(
                 Some(metadata.clone()),
                 child,
-                environment,
                 extensions,
                 output_path.join(child.slug()),
             )
@@ -70,10 +67,11 @@ pub fn render_file(
     parent:      Option<Metadata>,
     route:       &Route,
     children:    Vec<Metadata>,
-    environment: &Env,
     extensions:  &ExtMap,
     output_path: PathBuf,
 ) -> Metadata {
+    println!("* {}", route.route.join("/"));
+
     let raw_content = fs::read(&route.path).unwrap();
     let mut raw_out = fs::File::create(output_path.join(format!("{}", route.slug_with_ext())))
         .expect("Could not create output raw file");
@@ -88,7 +86,7 @@ pub fn render_file(
         raw_content,
     );
 
-    let rendered = extensions.render(&route.ext(), environment, context);
+    let rendered = extensions.render(&route.ext(), context);
     let mut render_out = fs::File::create(output_path.join(format!("{}.html", route.slug())))
         .expect("Could not create output render file");
     write!(render_out, "{}", rendered)

@@ -68,3 +68,13 @@ emit raw page with extension
 - `.something` files are ignored
 - `.dump/ext/<ext>.mustache` defines a template for `<ext>` file type
 - `.dump/base.mustache` defines the base template
+
+# Even more ideas
+
+- html, markdown, and templates need to be included by default.
+    - markdown especially, to render server-side
+    - we can actually do this automatically!
+- files without extension shouldn't have trailing dot.
+- more clearly define boundaries
+    - this project is like a shell script but verbose
+- handle errors more gracefully
