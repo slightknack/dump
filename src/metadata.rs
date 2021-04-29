@@ -45,7 +45,7 @@ impl Metadata {
             modified: modified.format("%F").to_string(),
             title:    route.title(),
             link:     format!("/{}", route.route.join("/")),
-            raw_link: format!("/{}.{}", route.route.join("/"), route.ext()),
+            raw_link: format!("/{}{}", route.route.join("/"), route.ext()),
             slug:     route.slug(),
             raw_slug: route.slug_with_ext(),
         }

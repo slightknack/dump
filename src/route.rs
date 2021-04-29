@@ -20,10 +20,11 @@ impl Route {
     }
 
     pub fn ext(&self) -> String {
-        match self.path.extension() {
+        let end = match self.path.extension() {
             Some(e) => e.to_str().unwrap().to_string(),
-            None => "".to_string(),
-        }
+            None => return "".to_string(),
+        };
+        format!(".{}", end)
     }
 
     pub fn slug(&self) -> String {
@@ -41,7 +42,7 @@ impl Route {
     pub fn slug_with_ext(&self) -> String {
         let ext = self.ext();
         let slug = self.slug();
-        return format!("{}.{}", slug, ext);
+        return format!("{}{}", slug, ext);
     }
 
     pub fn cd(&self, item: &str) -> Route {

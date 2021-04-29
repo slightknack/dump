@@ -78,3 +78,11 @@ emit raw page with extension
 - more clearly define boundaries
     - this project is like a shell script but verbose
 - handle errors more gracefully
+
+# Better rendering technique:
+```
+copy the directory to a new location
+walk the new directory:
+    for each file, render out copy as html
+    for each directory, render out all sub-files
+```

@@ -24,7 +24,7 @@ impl<'a> ExtMap<'a> {
                 .to_os_string().into_string().unwrap();
 
             let template = build_template(path);
-            map.insert(extension, template);
+            map.insert(format!(".{}", extension), template);
         }
 
         ExtMap { env, map }

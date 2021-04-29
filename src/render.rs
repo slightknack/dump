@@ -1,14 +1,21 @@
-use std::{fs, path::PathBuf, io::Write};
+use std::{fs, path::PathBuf, io::Write, collections::HashSet};
 use crate::{dump::{ExtMap, Env}, metadata::{Context, Metadata}, route::Route};
 
 pub fn get_index_children(route: &Route) -> (Option<Route>, Vec<Route>) {
     let mut index: Option<Route> = None;
     let mut children = vec![];
+    let mut slugs    = HashSet::new();
 
     let paths = fs::read_dir(&route.path).unwrap();
     for raw_path in paths {
         let path = raw_path.unwrap().path().to_path_buf();
         let new_route = route.cd(path.file_name().unwrap().to_str().unwrap());
+
+        if slugs.insert(new_route.slug()) {
+            eprintln!("Multiple slugs of the same name: {}", new_route.path.display());
+            panic!();
+        }
+
         children.push(new_route.clone());
 
         if path.is_file()
