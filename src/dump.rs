@@ -4,10 +4,11 @@ use std::{
     collections::HashMap,
 };
 use ramhorns::Template;
+use gitignored::Gitignore;
 use crate::metadata::Context;
 
 pub struct ExtMap<'a> {
-    env: Env<'a>,
+    pub env: Env<'a>,
     map: HashMap<String, Template<'a>>,
 }
 
@@ -55,6 +56,7 @@ pub fn build_template<'a>(path: PathBuf) -> Template<'a> {
 }
 
 pub struct Env<'a> {
+    pub dump_ignore:     Option<(Gitignore<PathBuf>, Vec<String>)>,
     pub base_template:   Template<'a>,
     pub index_template:  Template<'a>,
     pub text_template:   Template<'a>,
@@ -62,8 +64,27 @@ pub struct Env<'a> {
 }
 
 impl<'a> Env<'a> {
+    pub fn load_ignore_cwd(file: PathBuf) -> Option<(Gitignore<PathBuf>, Vec<String>)> {
+        let lines = fs::read_to_string(file).ok()?
+            .lines()
+            .map(|l| l.split("#").nth(0).unwrap().trim().to_string())
+            .filter(|l| l != "")
+            .collect();
+        let ignore = Gitignore::default();
+        return Some((ignore, lines));
+    }
+
+    pub fn ignores(&mut self, file: &Path) -> bool {
+        if let Some((ref mut ignore, ref lines)) = self.dump_ignore {
+            ignore.ignores(&lines.iter().map(|s| s as &str).collect::<Vec<&str>>(), file)
+        } else {
+            false
+        }
+    }
+
     pub fn base(path: PathBuf) -> Env<'a> {
         Env {
+            dump_ignore:     Env::load_ignore_cwd(path.join(".dumpignore")),
             base_template:   build_template(path.join("base.mustache")),
             index_template:  build_template(path.join("index.mustache")),
             text_template:   build_template(path.join("text.mustache")),

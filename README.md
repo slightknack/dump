@@ -92,3 +92,6 @@ I'm not going to write a full example here, but we could also use JS, to, say, w
 This is a very barebones project, and I have more planned. (Check out `IDEAS.md`).
 
 I have this huge 2TB hard-drive with a collection of files I want to be able to toss up online and explore. My goal is to be able to `dump` the drive and host it as a professional-looking website.
+
+## The `.dumpignore`
+If you put a `.dumpignore` in `.dump`, files that match the `.dumpignore` will be ignored.

@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 use deunicode::deunicode;
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Route {
     pub path:  PathBuf,
     pub route: Vec<String>,

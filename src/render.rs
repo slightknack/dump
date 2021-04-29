@@ -1,7 +1,7 @@
 use std::{fs, path::PathBuf, io::Write, collections::HashSet};
 use crate::{dump::{ExtMap, Env}, metadata::{Context, Metadata}, route::Route};
 
-pub fn get_index_children(route: &Route) -> (Option<Route>, Vec<Route>) {
+pub fn get_index_children(environment: &mut Env, route: &Route) -> (Option<Route>, Vec<Route>) {
     let mut index: Option<Route> = None;
     let mut children = vec![];
     let mut slugs    = HashSet::new();
@@ -11,8 +11,14 @@ pub fn get_index_children(route: &Route) -> (Option<Route>, Vec<Route>) {
         let path = raw_path.unwrap().path().to_path_buf();
         let new_route = route.cd(path.file_name().unwrap().to_str().unwrap());
 
-        if slugs.insert(new_route.slug()) {
-            eprintln!("Multiple slugs of the same name: {}", new_route.path.display());
+        if environment.ignores(&new_route.path) { continue; }
+        if !slugs.insert(new_route.slug()) {
+            println!("{:#?}", children);
+            eprintln!(
+                "Multiple slugs of the name '{}'; first duplicate is: {}",
+                new_route.slug(),
+                new_route.path.display()
+            );
             panic!();
         }
 
@@ -33,7 +39,7 @@ pub fn get_index_children(route: &Route) -> (Option<Route>, Vec<Route>) {
 pub fn render(
     parent:      Option<Metadata>,
     route:       &Route,
-    extensions:  &ExtMap,
+    extensions:  &mut ExtMap,
     output_path: PathBuf,
 ) -> Metadata {
     println!("  {}", route.route.join("/"));
@@ -41,7 +47,7 @@ pub fn render(
         .expect("Could not create parent dir");
 
     let metadata = Metadata::from_route(&route);
-    let (maybe_index, children) = get_index_children(&route);
+    let (maybe_index, children) = get_index_children(&mut extensions.env, &route);
     let mut md_children = vec![];
 
     for child in children.iter() {
