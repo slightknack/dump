@@ -5,7 +5,7 @@ use std::{
 };
 use ramhorns::Template;
 use gitignored::Gitignore;
-use crate::metadata::Context;
+use crate::{dump_rss::RssConfig, metadata::Context};
 
 pub struct ExtMap<'a> {
     pub env: Env<'a>,
@@ -56,6 +56,7 @@ pub fn build_template<'a>(path: PathBuf) -> Template<'a> {
 }
 
 pub struct Env<'a> {
+    pub dump_rss:     Option<RssConfig>,
     pub dump_ignore:     Option<(Gitignore<PathBuf>, Vec<String>)>,
     pub base_template:   Template<'a>,
     pub index_template:  Template<'a>,
@@ -84,6 +85,7 @@ impl<'a> Env<'a> {
 
     pub fn base(path: PathBuf) -> Env<'a> {
         Env {
+            dump_rss:        RssConfig::new(&path.join("dump_rss.toml")),
             dump_ignore:     Env::load_ignore_cwd(path.join(".dumpignore")),
             base_template:   build_template(path.join("base.mustache")),
             index_template:  build_template(path.join("index.mustache")),

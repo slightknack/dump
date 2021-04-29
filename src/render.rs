@@ -40,12 +40,14 @@ pub fn render(
     route:       &Route,
     extensions:  &mut ExtMap,
     output_path: PathBuf,
+    for_rss:     &mut Vec<Metadata>,
 ) -> Metadata {
-    println!("  {}", route.route.join("/"));
+    println!("|  {}", route.route.join("/"));
     fs::create_dir_all(output_path.clone())
         .expect("Could not create parent dir");
 
     let metadata = Metadata::from_route(&route);
+    for_rss.push(metadata.clone());
     let (maybe_index, children) = get_index_children(&mut extensions.env, &route);
     let mut md_children = vec![];
 
@@ -57,6 +59,7 @@ pub fn render(
                 vec![],
                 extensions,
                 output_path.clone(),
+                for_rss,
             )
         } else {
             render(
@@ -64,13 +67,14 @@ pub fn render(
                 child,
                 extensions,
                 output_path.join(child.slug()),
+                for_rss,
             )
         };
         md_children.push(md_child);
     }
 
     // TODO: deal w/ maybe index.
-    // todo!();
+    // todo!("No index!");
 
     return metadata;
 }
@@ -81,8 +85,9 @@ pub fn render_file(
     children:    Vec<Metadata>,
     extensions:  &ExtMap,
     output_path: PathBuf,
+    for_rss:     &mut Vec<Metadata>,
 ) -> Metadata {
-    println!("* {}", route.route.join("/"));
+    println!("|> {}", route.route.join("/"));
 
     let raw_content = fs::read(&route.path).unwrap();
     let mut raw_out = fs::File::create(output_path.join(format!("{}", route.slug_with_ext())))
@@ -91,6 +96,7 @@ pub fn render_file(
         .expect("Could not write out raw");
 
     let metadata = Metadata::from_route(&route);
+    for_rss.push(metadata.clone());
     let context = Context::new(
         metadata.clone(),
         parent,

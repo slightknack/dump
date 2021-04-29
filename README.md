@@ -1,4 +1,4 @@
-# D U M P
+# DUMP
 This is a quick and dirty CLI tool that:
 
 - takes a folder,
@@ -7,7 +7,6 @@ This is a quick and dirty CLI tool that:
     - (like GitHub Pages.)
 
 Under the hood we use `ramhorns` for templating, and `rss` for, well, RSS.
-
 
 ## Usage
 To dump a `website`:
@@ -18,10 +17,11 @@ cd website
 dump ../website-rendered # output path
 ```
 
-> Notes:
-> 1. Your dump doesn't have to be named `website`. You could name it "Carl's Magical Landfill" for all I care.
-> 2. By default, if 'output path' already exists, dump will abort. To overwrite the output path no matter what, pass the `--force` flag after the output path: `dump <output> --force`.
+> ### Notes
+> 1. Your dump doesn't have to be named `website`. You could name it *Carl's Magical Landfill* for all I care.
+> 2. By default, if 'output path' already exists, `dump` will abort. To overwrite the output path no matter what, pass the `--force` flag after the output path: `dump <output> --force`.
 
+## Setup
 We only require one thing: a `.dump/` directory in `website`'s root.
 The `.dump/` directory *must* have the following files:
 

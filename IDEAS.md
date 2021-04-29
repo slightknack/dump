@@ -86,3 +86,9 @@ walk the new directory:
     for each file, render out copy as html
     for each directory, render out all sub-files
 ```
+
+# More ideas
+
+- Builds a search index
+- Can write JS to use search index.
+- Trim content to get short description in Metadata

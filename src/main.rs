@@ -9,6 +9,7 @@ mod dump;
 mod metadata;
 mod route;
 mod render;
+mod dump_rss;
 
 fn main() {
     let start = time::Instant::now();
@@ -23,15 +24,18 @@ fn main() {
         None       => false,
     };
 
-    if !overwrite {
-        if Path::new(&output_path).exists() {
-            panic!("Output path already exists. Remove it and try again");
+    let exists = Path::new(&output_path).exists();
+    if overwrite {
+        if exists {
+            let _ = fs::remove_dir_all(&output_path);
         }
     } else {
-        fs::remove_dir_all(&output_path)
-            .expect("Could not remove out dir");
+        if exists {
+            panic!("Output path already exists. Remove it and try again");
+        }
     }
 
+    println!("Dumping...");
 
     // build the walking context from .dump
     let base = dump::Env::base(input_path.join(".dump"));
@@ -39,11 +43,20 @@ fn main() {
 
     // start recursive rendering process with root page
     let base_root = route::Route::root(input_path);
+    let mut for_rss = vec![];
 
     // render out to a tmp dir, then move?
-    render::render(None, &base_root, &mut extensions, PathBuf::from(output_path));
+    render::render(None, &base_root, &mut extensions, PathBuf::from(output_path.clone()), &mut for_rss);
+
+    // do the RSS stuff
+    if let Some(rss) = extensions.env.dump_rss {
+        println!("Generating RSS feed...");
+        rss.write_feed(Path::new(&output_path), for_rss);
+    } else {
+        println!("Not generating RSS feed.")
+    }
 
     // time it
     let taken = time::Instant::now().duration_since(start).as_millis();
-    println!("Walked in {}s", taken as f64 / 1000.0);
+    println!("Dumped in {}s!", taken as f64 / 1000.0);
 }
