@@ -1,73 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
-    <title>The Dump Website Dumper</title>
-    <link>https://www.example.com</link>
+    <title>Dump of Dump</title>
+    <link>https://slightknack.github.io/dump</link>
     <description>This is the dump of the program that made this dump.</description>
     <generator>RSS Dumped by Dump</generator>
     <item>
       <title>dump</title>
-      <link>https://www.example.com/.html</link>
+      <link>https://slightknack.github.io/dump/.html</link>
       <pubDate>Tue, 27 Apr 2021 19:11:45 UTC</pubDate>
     </item>
     <item>
       <title>IDEAS</title>
-      <link>https://www.example.com/ideas.html</link>
+      <link>https://slightknack.github.io/dump/ideas.html</link>
       <pubDate>Tue, 27 Apr 2021 19:13:08 UTC</pubDate>
     </item>
     <item>
       <title>src</title>
-      <link>https://www.example.com/src.html</link>
+      <link>https://slightknack.github.io/dump/src.html</link>
       <pubDate>Tue, 27 Apr 2021 19:11:45 UTC</pubDate>
     </item>
     <item>
       <title>main</title>
-      <link>https://www.example.com/src/main.html</link>
+      <link>https://slightknack.github.io/dump/src/main.html</link>
       <pubDate>Tue, 27 Apr 2021 19:11:45 UTC</pubDate>
     </item>
     <item>
       <title>route</title>
-      <link>https://www.example.com/src/route.html</link>
+      <link>https://slightknack.github.io/dump/src/route.html</link>
       <pubDate>Wed, 28 Apr 2021 06:39:04 UTC</pubDate>
     </item>
     <item>
       <title>render</title>
-      <link>https://www.example.com/src/render.html</link>
+      <link>https://slightknack.github.io/dump/src/render.html</link>
       <pubDate>Wed, 28 Apr 2021 08:59:16 UTC</pubDate>
     </item>
     <item>
       <title>dump</title>
-      <link>https://www.example.com/src/dump.html</link>
+      <link>https://slightknack.github.io/dump/src/dump.html</link>
       <pubDate>Wed, 28 Apr 2021 06:38:28 UTC</pubDate>
     </item>
     <item>
       <title>explore</title>
-      <link>https://www.example.com/explore.html</link>
+      <link>https://slightknack.github.io/dump/explore.html</link>
       <pubDate>Thu, 29 Apr 2021 13:35:13 UTC</pubDate>
     </item>
     <item>
       <title>reset</title>
-      <link>https://www.example.com/explore/reset.html</link>
+      <link>https://slightknack.github.io/dump/explore/reset.html</link>
       <pubDate>Thu, 29 Apr 2021 14:40:43 UTC</pubDate>
     </item>
     <item>
       <title>style</title>
-      <link>https://www.example.com/explore/style.html</link>
+      <link>https://slightknack.github.io/dump/explore/style.html</link>
       <pubDate>Thu, 29 Apr 2021 13:35:13 UTC</pubDate>
     </item>
     <item>
       <title>README</title>
-      <link>https://www.example.com/readme.html</link>
+      <link>https://slightknack.github.io/dump/readme.html</link>
       <pubDate>Thu, 29 Apr 2021 05:19:40 UTC</pubDate>
     </item>
     <item>
       <title>dump_rss</title>
-      <link>https://www.example.com/src/dump-rss.html</link>
+      <link>https://slightknack.github.io/dump/src/dump-rss.html</link>
       <pubDate>Thu, 29 Apr 2021 18:47:03 UTC</pubDate>
     </item>
     <item>
       <title>metadata</title>
-      <link>https://www.example.com/src/metadata.html</link>
+      <link>https://slightknack.github.io/dump/src/metadata.html</link>
       <pubDate>Thu, 29 Apr 2021 04:52:16 UTC</pubDate>
     </item>
   </channel>
