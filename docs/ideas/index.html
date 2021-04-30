@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>IDEAS</title>
+        <link rel="stylesheet" href="/explore/reset.css"></link>
+        <link rel="stylesheet" href="/explore/style.css"></link>
+        <link rel="stylesheet"
+              href="//unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/default.min.css">
+        <script src="//unpkg.com/@highlightjs/cdn-assets@10.7.2/highlight.min.js"></script>
+    </head>
+    <body style="padding-bottom: 10vh;">
+        <a href="/">
+            <div style="background-color: #d44000; color: #fff">
+                <div class="narrow">
+                    <h1>The <em>Dump</em> Project</h1>
+                    <p><a href="https://www.slightknack.dev/">'Crafted' /s by Isaac Clayton</a></p>
+                </div>
+            </div>
+        </a>
+        <div class="narrow">
+            <h1>IDEAS</h1>
+            <p class="tag"><strong>Created:</strong> Tuesday April 27, 2021<br><strong>Last Edited:</strong> Thursday April 29, 2021</p>
+            <p>↖ Back to <a href="/">dump</a>?</p>
+            <hr>
+            <h1><code>slightknack.dev</code> version 2</h1>
+<h1>Goals</h1>
+<ul>
+<li>Static, deployable on cdn</li>
+<li>Versioned w/ Git</li>
+<li>Hostable on Github/Pages</li>
+<li>Takes a folder and dumps a website</li>
+<li>Can embed articles</li>
+<li>Can embed small projects</li>
+<li>Generated pages are static and optimized</li>
+<li>Logical mapping from files to locations</li>
+<li>Standalone Rust binary</li>
+</ul>
+<h1>Ideas</h1>
+<ul>
+<li>Files prefixed with <code>_</code> are accessible but hidden.</li>
+<li>Use git history to determine created / edited.</li>
+<li>Collate subfolders into feeds.
+<ul>
+<li>RSS feeds auto-generated</li>
+</ul>
+</li>
+<li>Files are named <code>this is the title.extension</code>
+<ul>
+<li>slug becomes <code>this-is-the-title</code>.</li>
+<li>two files in the same folder is not allowed.</li>
+<li><code>index.something</code> is the root</li>
+<li>folders without index generate an index</li>
+</ul>
+</li>
+<li>HTML files do not have styling as default, act as local templates
+<ul>
+<li>mustache, passed object with environment context.</li>
+</ul>
+</li>
+<li>Markdown files are rendered out into posts
+<ul>
+<li>could this be done via template?</li>
+</ul>
+</li>
+<li>Other files are rendered out in a file-discovery mode.</li>
+<li>a route with an extension returns the raw content</li>
+</ul>
+<pre><code>+ website
+|-+ _static
+| |- style.css
+| |- base.html
+|-+ blog
+| |- My First Post.md
+| |- My Second Post.md
+|- index.md
+</code></pre>
+<p>Rendering technique:</p>
+<pre><code>start with the root folder
+(1) enter the folder
+if index.* in folder
+    go to (2) with index.*
+pages = for each item in folder
+    if item is a folder go to (1)
+    if not go to (2) with item
+    if item is hidden, don't hide
+make feed from subpages
+render index with feed if markdown
+render raw index if html
+
+(2) load the file
+use git to find last time modified
+if file is markdown, render and insert into default html template
+if file is html, do the raw html
+otherwise, insert into default html template
+emit rendered page without extension
+emit raw page with extension
+</code></pre>
+<h1>More ideas</h1>
+<ul>
+<li><code>.dump</code> folder is used for configuration</li>
+<li><code>.something</code> files are ignored</li>
+<li><code>.dump/ext/&lt;ext&gt;.mustache</code> defines a template for <code>&lt;ext&gt;</code> file type</li>
+<li><code>.dump/base.mustache</code> defines the base template</li>
+</ul>
+<h1>Even more ideas</h1>
+<ul>
+<li>html, markdown, and templates need to be included by default.
+<ul>
+<li>markdown especially, to render server-side</li>
+<li>we can actually do this automatically!</li>
+</ul>
+</li>
+<li>files without extension shouldn’t have trailing dot.</li>
+<li>more clearly define boundaries
+<ul>
+<li>this project is like a shell script but verbose</li>
+</ul>
+</li>
+<li>handle errors more gracefully</li>
+</ul>
+<h1>Better rendering technique:</h1>
+<pre><code>copy the directory to a new location
+walk the new directory:
+    for each file, render out copy as html
+    for each directory, render out all sub-files
+</code></pre>
+<h1>More ideas</h1>
+<ul>
+<li>Builds a search index</li>
+<li>Can write JS to use search index.</li>
+<li>Trim content to get short description in Metadata</li>
+</ul>
+
+        </div>
+    </body>
+</html>

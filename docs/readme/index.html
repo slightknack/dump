@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>README</title>
+        <link rel="stylesheet" href="/explore/reset.css"></link>
+        <link rel="stylesheet" href="/explore/style.css"></link>
+        <link rel="stylesheet"
+              href="//unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/default.min.css">
+        <script src="//unpkg.com/@highlightjs/cdn-assets@10.7.2/highlight.min.js"></script>
+    </head>
+    <body style="padding-bottom: 10vh;">
+        <a href="/">
+            <div style="background-color: #d44000; color: #fff">
+                <div class="narrow">
+                    <h1>The <em>Dump</em> Project</h1>
+                    <p><a href="https://www.slightknack.dev/">'Crafted' /s by Isaac Clayton</a></p>
+                </div>
+            </div>
+        </a>
+        <div class="narrow">
+            <h1>README</h1>
+            <p class="tag"><strong>Created:</strong> Thursday April 29, 2021<br><strong>Last Edited:</strong> Friday April 30, 2021</p>
+            <p>↖ Back to <a href="/">dump</a>?</p>
+            <hr>
+            <h1>DUMP</h1>
+<p>This is a quick and dirty CLI tool that:</p>
+<ul>
+<li>takes a folder,</li>
+<li>dumps it into a static website,</li>
+<li>which you can then throw up on a CDN or something.
+<ul>
+<li>(like GitHub Pages.)</li>
+</ul>
+</li>
+</ul>
+<p>Under the hood we use <code>ramhorns</code> for templating, and <code>rss</code> for, well, RSS.</p>
+<blockquote>
+<p>Disclaimer: This project is not production quality, and I don’t intend for it to ever be. I just wanted to blow some steam, and write a project without enforcing abstraction or error handling or correctness or whatever. Don’t use this as a SSG unless you want to fiddle around with the code yourself.</p>
+</blockquote>
+<h2>Usage</h2>
+<p>After installing <code>dump</code> as a binary on your <code>$PATH</code>, To dump a <code>website</code>:</p>
+<pre><code class="language-bash"># input is cwd
+cd website
+dump ../website-rendered # output path
+</code></pre>
+<blockquote>
+<p>Notes:</p>
+<ol>
+<li>Your dump doesn’t have to be named <code>website</code>. You could name it <em>Carl’s Magical Landfill</em> for all I care.</li>
+<li>By default, if ‘output path’ already exists, <code>dump</code> will abort. To overwrite the output path no matter what, pass the <code>--force</code> flag after the output path: <code>dump &lt;output&gt; --force</code>.</li>
+</ol>
+</blockquote>
+<h2>Setup</h2>
+<p>We only require one thing: a <code>.dump/</code> directory in <code>website</code>’s root.
+The <code>.dump/</code> directory <em>must</em> have the following files:</p>
+<table><thead><tr><th>name</th><th>contents</th></tr></thead><tbody>
+<tr><td><code>base.mustache</code></td><td>Base html file into which all pages are rendered</td></tr>
+<tr><td><code>index.mustache</code></td><td>Component for indexes</td></tr>
+<tr><td><code>text.mustache</code></td><td>Component for plain text files</td></tr>
+<tr><td><code>binary.mustache</code></td><td>Component for unknown binary files</td></tr>
+</tbody></table>
+<p>Defaults for these files can be copied from this repo’s <code>./dump</code>.</p>
+<p>You can also define additional components for <em>extensions</em>, say, Markdown.
+These extensions must exist in <code>.dump/ext/</code>.
+Dump provides content as markdown, if requested, so the following is possible:</p>
+<pre><code class="language-html">&lt;!-- ./dump/ext/md.mustache --&gt;
+{{#md}}{{{content}}}{{/md}}
+</code></pre>
+<p>These extensions must take the form <code>&lt;ext&gt;.mustache</code>, where <code>&lt;ext&gt;</code> is the file extension, e.g. <code>file-name.md</code> has the <code>&lt;ext&gt;</code> of <code>md</code>.</p>
+<h2>Templates</h2>
+<p>We use Mustache for templating (the <code>ramhorns</code> engine specifically). Here are the fields avaliable for templating:</p>
+<h3>Base fields</h3>
+<p>Here are the base fields provided, that can be accessed directly, e.g. <code>{{content}}</code>:</p>
+<ul>
+<li><code>m</code>: metadata about this current file</li>
+<li><code>parent</code>: optional metadata about parent</li>
+<li><code>children</code>: list of metadata about children, sorted by date</li>
+<li><code>content</code>: Content as a string if utf-8 encoded</li>
+<li><code>md</code>: markdown version of content</li>
+</ul>
+<h3>Metadata fields</h3>
+<p><code>m</code>, <code>parent</code>, and <code>children</code> are all metadata. Note that these are nested fields need to be accessed as <code>{{#field}}{{value}}{{/field}}</code>:</p>
+<ul>
+<li><code>created</code>: time file was created, <code>YYYY-MM-DD</code></li>
+<li><code>modified</code>: time file was las modified, <code>YYYY-MM-DD</code></li>
+<li><code>title</code>: human-readable title of the file</li>
+<li><code>link</code>: web link to this page, relative to root, i.e. <code>this/is/some/page</code></li>
+<li><code>raw_link</code>: web link to this page’s source, i.e. <code>this/is/some/image.png</code></li>
+<li><code>slug</code>: Last part of the link, i.e. <code>page</code></li>
+<li><code>raw_slug</code>: Last part of link with extension, i.e. <code>image.png</code></li>
+</ul>
+<h3>Markdown</h3>
+<p><code>md</code> is the markdown field. It has only one item:</p>
+<ul>
+<li><code>content</code>: content, rendered as markdown.</li>
+</ul>
+<p>This field can be used in templates like this: <code>{{#md}}{{{content}}}{{/md}}</code>. Note that <code>content</code> <em>must</em> be escaped with triple brackets <code>{{{}}}</code> because it is raw html.</p>
+<p>Nothing much else to add, I guess.</p>
+<h3>Getting Creative</h3>
+<p>Extensions are pretty flexible. Say we have an image file (<code>.png</code>) and we want it to be rendered as a page. We can something like:</p>
+<pre><code class="language-html">&lt;!-- ./dump/ext/png.mustache --&gt;
+&lt;h1&gt;{{#m}}{{title}}{{/m}}&lt;/h1&gt;
+&lt;p&gt;Taken on: {{#m}}{{created}}{{/m}}&lt;/p&gt;
+&lt;img src=&quot;{{#m}}{{raw_link}}{{\m}}&quot;&gt;
+</code></pre>
+<p>Here, the <code>img</code> tag links to the raw image.</p>
+<p>I’m not going to write a full example here, but we could also use JS, to, say, write an interface to explore some data or something.</p>
+<p>This is a very barebones project, and I have more planned. (Check out <code>IDEAS.md</code>).</p>
+<p>I have this huge 2TB hard-drive with a collection of files I want to be able to toss up online and explore. My goal is to be able to <code>dump</code> the drive and host it as a professional-looking website.</p>
+<h3>The <code>.dumpignore</code></h3>
+<p>If you put a <code>.dumpignore</code> in <code>.dump</code>, files that match the <code>.dumpignore</code> will be ignored. Although this file uses the same syntax as a <code>.gitignore</code>, it’s a bit different semantically: you can only have one, and all patterns are matched from the root.</p>
+<blockquote>
+<p>Note: This doesn’t work 100% yet.</p>
+</blockquote>
+<h3>The <code>dump_rss.toml</code></h3>
+<p>Dump can generate an RSS feed for your website, just include a <code>dump_rss.toml</code> in <code>.dump</code>. The format is as follows:</p>
+<pre><code class="language-toml">title = &quot;The Dump Website Dumper&quot;
+url = &quot;https://www.example.com&quot;
+description = &quot;This is the dump of the program that made this dump.&quot;
+</code></pre>
+<blockquote>
+<p>Note: This works, but hasn’t been tested with an RSS reader. The XML looks good though.</p>
+</blockquote>
+
+        </div>
+    </body>
+</html>
