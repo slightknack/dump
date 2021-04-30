@@ -21,7 +21,7 @@
         <div class="narrow">
             <h1>render</h1>
             <p class="tag"><strong>Created:</strong> Wednesday April 28, 2021<br><strong>Last Edited:</strong> Friday April 30, 2021</p>
-            <p>↖ Back to <a href="/src">src</a>?</p>
+            <p>↖ Back to <a href="/dump/src">src</a>?</p>
             <hr>
             <pre><code>use std::{fs, path::PathBuf, io::Write, collections::HashSet};
 use crate::{dump::{ExtMap, Env}, metadata::{Context, Metadata}, route::Route};
@@ -114,10 +114,7 @@ pub fn render_index(
 ) -> Metadata {
     let (raw_content, ext) = if let Some(index) = maybe_index {
         let raw = fs::read(&index.path).unwrap();
-        let mut raw_out = fs::File::create(output_path.join(format!("{}", index.slug_with_ext())))
-            .expect("Could not create output raw file");
-        raw_out.write_all(&raw)
-            .expect("Could not write out raw");
+        // do not write raw index
         (raw, index.ext())
     } else {
         (vec![], "none".to_string())

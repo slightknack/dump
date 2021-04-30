@@ -45,7 +45,7 @@ impl Metadata {
         let created = time_in_utc(fs_meta.created().unwrap());
         let modified = time_in_utc(fs_meta.modified().unwrap());
 
-        let x = Metadata {
+        Metadata {
             published: created.format("%a, %d %b %Y %T UTC").to_string(),
             created_human: created.format("%A %B %e, %Y").to_string(),
             modified_human: modified.format("%A %B %e, %Y").to_string(),
@@ -56,15 +56,7 @@ impl Metadata {
             raw_link:  format!("{}{}", route.route.join("/"), route.ext()),
             slug:      route.slug(),
             raw_slug:  route.slug_with_ext(),
-        };
-
-        println!("{}", x.title);
-        println!("{}", x.link);
-        println!("{}", x.raw_link);
-        println!("{}", x.slug);
-        println!("{}", x.raw_slug);
-
-        return x;
+        }
     }
 }
 
