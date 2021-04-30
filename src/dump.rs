@@ -34,7 +34,9 @@ impl<'a> ExtMap<'a> {
     /// Takes an extension, an environment, and some context,
     /// and renders it into some html,
     /// which it then inserts into the base template.
-    pub fn render(&self, ext: &str, mut context: Context) -> String {
+    pub fn render(&self, ext: &str, mut context: Context, index: bool) -> String {
+        let content = ext != "none";
+
         let template = match self.map.get(ext) {
             Some(t) => t,
             None => match context.content {
@@ -43,8 +45,13 @@ impl<'a> ExtMap<'a> {
             }
         };
 
-        let inner = template.render(&context);
+        let inner = if content { template.render(&context) } else { "".to_string() };
         context.content = Some(inner);
+        if index {
+            let inner = self.env.index_template.render(&context);
+            context.content = Some(inner);
+        }
+
         self.env.base_template.render(&context)
     }
 }

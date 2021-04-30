@@ -5,12 +5,21 @@
         <title>{{#m}}{{title}}{{/m}}</title>
         <link rel="stylesheet" href="/explore/reset.css"></link>
         <link rel="stylesheet" href="/explore/style.css"></link>
+        <link rel="stylesheet"
+              href="//unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/default.min.css">
+        <script src="//unpkg.com/@highlightjs/cdn-assets@10.7.2/highlight.min.js"></script>
     </head>
-    <body>
+    <body style="padding-bottom: 10vh;">
+        <div style="background-color: var(--soft-fill)">
+            <div class="narrow">
+                <h1>The <em>Dump</em> Project</h1>
+                <p>by Isaac Clayton</p>
+            </div>
+        </div>
         <div class="narrow">
-            {{#parent}}<p><a href="{{link}}/index.html">{{title}}</a></p>{{/parent}}
             <h1>{{#m}}{{title}}{{/m}}</h1>
-            <p style="align: left;"><strong>Created:</strong> {{#m}}{{created}}{{/m}}<br><strong>Last Modified:</strong> {{#m}}{{modified}}{{/m}}</p>
+            <p class="tag"><strong>Created:</strong> {{#m}}{{created_human}}{{/m}}<br><strong>Last Edited:</strong> {{#m}}{{modified_human}}{{/m}}</p>
+            {{#parent}}<p>Back to <a href="/{{link}}">{{title}}</a>.</p>{{/parent}}
             <hr>
             {{{content}}}
         </div>

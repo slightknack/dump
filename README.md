@@ -8,8 +8,10 @@ This is a quick and dirty CLI tool that:
 
 Under the hood we use `ramhorns` for templating, and `rss` for, well, RSS.
 
+> Disclaimer: This project is not production quality, and I don't intend for it to ever be. I just wanted to blow some steam, and write a project without enforcing abstraction or error handling or correctness or whatever. Don't use this as a SSG unless you want to fiddle around with the code itself.
+
 ## Usage
-To dump a `website`:
+After installing `dump` as a binary on your `$PATH`, To dump a `website`:
 
 ```bash
 # input is cwd

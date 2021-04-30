@@ -1,19 +1,20 @@
 use std::{
     fs,
-    path::{Path, PathBuf},
-    collections::HashMap,
     time::SystemTime,
 };
-use ramhorns::{Template, Content};
+use ramhorns::Content;
 use chrono::prelude::*;
 use pulldown_cmark::{Parser, Options, html};
-use rss::ChannelBuilder;
 use crate::route::Route;
 
 #[derive(Debug, Clone, Content, PartialEq, Eq)]
 pub struct Metadata {
     /// Time file was created in RFC 2822
     pub published: String,
+    /// Time file was created as `Month Day, Year`
+    pub created_human: String,
+    /// Time file was last modified as `Month Day, Year`
+    pub modified_human: String,
     /// Time file was created
     pub created: String,
     /// Time file was last modified
@@ -39,17 +40,15 @@ fn time_in_utc(t: SystemTime) -> DateTime<Utc> {
 }
 
 impl Metadata {
-    pub fn date_2822(time: DateTime<Utc>) -> String {
-        time.format("%a, %d %b %Y %T UTC").to_string()
-    }
-
     pub fn from_route(route: &Route) -> Metadata {
         let fs_meta = fs::metadata(&route.path).expect("Could not read fs metadata");
         let created = time_in_utc(fs_meta.created().unwrap());
         let modified = time_in_utc(fs_meta.modified().unwrap());
 
         Metadata {
-            published: Metadata::date_2822(created),
+            published: created.format("%a, %d %b %Y %T UTC").to_string(),
+            created_human: created.format("%A %B %e, %Y").to_string(),
+            modified_human: modified.format("%A %B %e, %Y").to_string(),
             created:   created.format("%F").to_string(),
             modified:  modified.format("%F").to_string(),
             title:     route.title(),

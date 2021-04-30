@@ -2,14 +2,29 @@
 
 .narrow {
     padding: 2vh;
-    /* padding-top: 30vh;
-    padding-bottom: 30vh; */
+    /* padding-top: 10vh;
+    padding-bottom: 10vh; */
     margin-left: auto;
     margin-right: auto;
     max-width: 700px;
 }
 
+.boxed {
+    padding: 2vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    border: 2pt solid var(--soft-fill);
+    border-radius: 2pt;
+}
+
+.tag {
+    font-family: var(--font-title);
+    font-size:   calc(var(--font-base));
+    color:       var(--half-fill);
+}
+
 :root {
+    --half-fill: #777;
     --bg-fill:   #eee;
     --text-fill: #000;
     --soft-fill: #ddd;
@@ -26,6 +41,7 @@
         --bg-fill:   #111;
         --text-fill: #fff;
         --soft-fill: #222;
+        --half-fill: #999;
     }
 }
 

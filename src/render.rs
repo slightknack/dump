@@ -1,8 +1,8 @@
 use std::{fs, path::PathBuf, io::Write, collections::HashSet};
 use crate::{dump::{ExtMap, Env}, metadata::{Context, Metadata}, route::Route};
 
-pub fn get_index_children(environment: &mut Env, route: &Route) -> (Option<Route>, Vec<Route>) {
-    let mut index: Option<Route> = None;
+pub fn get_children(environment: &mut Env, route: &Route) -> (Option<Route>, Vec<Route>) {
+    let mut index    = None;
     let mut children = vec![];
     let mut slugs    = HashSet::new();
 
@@ -21,14 +21,10 @@ pub fn get_index_children(environment: &mut Env, route: &Route) -> (Option<Route
             panic!();
         }
 
-        children.push(new_route.clone());
-
-        if path.is_file()
-        && path.file_stem().unwrap() == "index" {
-            index = match index {
-                None => Some(new_route),
-                Some(_) => panic!("Multiple indexes defined"),
-            }
+        if new_route.slug() != "index" {
+            children.push(new_route.clone());
+        } else {
+            index = Some(new_route.clone());
         }
     }
 
@@ -46,17 +42,17 @@ pub fn render(
     fs::create_dir_all(output_path.clone())
         .expect("Could not create parent dir");
 
+    let (index, children) = get_children(&mut extensions.env, &route);
+    let mut md_children = vec![];
+
     let metadata = Metadata::from_route(&route);
     for_rss.push(metadata.clone());
-    let (maybe_index, children) = get_index_children(&mut extensions.env, &route);
-    let mut md_children = vec![];
 
     for child in children.iter() {
         let md_child = if child.path.is_file() {
             render_file(
                 Some(metadata.clone()),
                 child,
-                vec![],
                 extensions,
                 output_path.clone(),
                 for_rss,
@@ -73,16 +69,54 @@ pub fn render(
         md_children.push(md_child);
     }
 
-    // TODO: deal w/ maybe index.
-    // todo!("No index!");
+    return render_index(
+        parent,
+        metadata,
+        index,
+        md_children,
+        extensions,
+        output_path,
+    );
+}
 
-    return metadata;
+pub fn render_index(
+    parent:      Option<Metadata>,
+    route:       Metadata,
+    maybe_index: Option<Route>,
+    children:    Vec<Metadata>,
+    extensions:  &mut ExtMap,
+    output_path: PathBuf,
+) -> Metadata {
+    let (raw_content, ext) = if let Some(index) = maybe_index {
+        let raw = fs::read(&index.path).unwrap();
+        let mut raw_out = fs::File::create(output_path.join(format!("{}", index.slug_with_ext())))
+            .expect("Could not create output raw file");
+        raw_out.write_all(&raw)
+            .expect("Could not write out raw");
+        (raw, index.ext())
+    } else {
+        (vec![], "none".to_string())
+    };
+
+    let context = Context::new(
+        route.clone(),
+        parent.clone(),
+        children.clone(),
+        raw_content,
+    );
+
+    let rendered = extensions.render(&ext, context, true);
+    let mut render_out = fs::File::create(output_path.join("index.html"))
+        .expect("Could not create output render file");
+    write!(render_out, "{}", rendered)
+        .expect("Could not write out rendered");
+
+    return route;
 }
 
 pub fn render_file(
     parent:      Option<Metadata>,
     route:       &Route,
-    children:    Vec<Metadata>,
     extensions:  &ExtMap,
     output_path: PathBuf,
     for_rss:     &mut Vec<Metadata>,
@@ -100,12 +134,16 @@ pub fn render_file(
     let context = Context::new(
         metadata.clone(),
         parent,
-        children,
+        vec![],
         raw_content,
     );
 
-    let rendered = extensions.render(&route.ext(), context);
-    let mut render_out = fs::File::create(output_path.join(format!("{}.html", route.slug())))
+    let actual_out = output_path.join(route.slug());
+    fs::create_dir_all(actual_out.clone())
+        .expect("Could not create parent dir");
+
+    let rendered = extensions.render(&route.ext(), context, false);
+    let mut render_out = fs::File::create(actual_out.join("index.html"))
         .expect("Could not create output render file");
     write!(render_out, "{}", rendered)
         .expect("Could not write out rendered");

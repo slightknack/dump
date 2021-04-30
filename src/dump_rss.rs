@@ -1,4 +1,4 @@
-use std::{fs, path::Path, io::Write};
+use std::{fs, path::Path};
 use serde::Deserialize;
 use toml;
 use rss::{ItemBuilder, ChannelBuilder};

@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use deunicode::deunicode;
 
 #[derive(Debug, Clone)]
