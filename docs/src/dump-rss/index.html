@@ -51,7 +51,7 @@ impl RssConfig {
         for raw_item in metadata {
             let item = ItemBuilder::default()
                 .title(raw_item.title)
-                .link(format!("{}/{}.html", self.url, raw_item.link))
+                .link(format!("{}/{}/index.html", self.url, raw_item.link))
                 .pub_date(raw_item.published)
                 .build()
                 .expect("Could not build RSS item");

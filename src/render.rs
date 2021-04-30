@@ -89,10 +89,7 @@ pub fn render_index(
 ) -> Metadata {
     let (raw_content, ext) = if let Some(index) = maybe_index {
         let raw = fs::read(&index.path).unwrap();
-        let mut raw_out = fs::File::create(output_path.join(format!("{}", index.slug_with_ext())))
-            .expect("Could not create output raw file");
-        raw_out.write_all(&raw)
-            .expect("Could not write out raw");
+        // do not write raw index
         (raw, index.ext())
     } else {
         (vec![], "none".to_string())
